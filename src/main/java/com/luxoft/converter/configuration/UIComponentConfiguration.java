@@ -1,6 +1,8 @@
 package com.luxoft.converter.configuration;
 
+import com.luxoft.converter.service.file.VirtualFileStorage;
 import com.luxoft.converter.ui.component.bar.menu.MainMenuBar;
+import com.luxoft.converter.ui.component.custom.CustomFileChooser;
 import com.luxoft.converter.ui.component.panel.CentralPanel;
 import com.luxoft.converter.ui.component.panel.FooterPanel;
 import com.luxoft.converter.ui.component.panel.HeaderPanel;
@@ -39,6 +41,21 @@ public class UIComponentConfiguration {
 	@Bean(name = "footerPanel")
 	public JPanel getFooterPanel(){
 		return new FooterPanel();
+	}
+
+	@Bean(name = "testFileChooser")
+	public CustomFileChooser getTestFileChooser(){
+		return new CustomFileChooser("Choose test file", VirtualFileStorage.TEST_FILE);
+	}
+
+	@Bean(name = "questionsFileChooser")
+	public CustomFileChooser getQuestionsFileChooser(){
+		return new CustomFileChooser("Choose target file for questions", VirtualFileStorage.QUESTIONS_FILE);
+	}
+
+	@Bean(name = "answersFileChooser")
+	public CustomFileChooser getAnswersFileChooser(){
+		return new CustomFileChooser("Choose target file for answers", VirtualFileStorage.ANSWERS_FILE);
 	}
 
 

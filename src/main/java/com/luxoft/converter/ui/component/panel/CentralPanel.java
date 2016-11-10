@@ -1,5 +1,8 @@
 package com.luxoft.converter.ui.component.panel;
 
+import com.luxoft.converter.ui.component.custom.CustomFileChooser;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +11,15 @@ import java.awt.*;
  * Created by pgolovenkov on 09.11.2016.
  */
 public class CentralPanel extends JPanel {
+
+	@Autowired
+	CustomFileChooser testFileChooser;
+
+	@Autowired
+	CustomFileChooser questionsFileChooser;
+
+	@Autowired
+	CustomFileChooser answersFileChooser;
 
 	public CentralPanel() {
 		super();
@@ -18,18 +30,16 @@ public class CentralPanel extends JPanel {
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(0, 5, 0, 5);
 		constraints.gridx = 0;
 
-		JLabel label = new JLabel("Header panel!!!");
 		constraints.gridy = 0;
-		add(label, constraints);
+		add(testFileChooser, constraints);
 
-		JLabel label2 = new JLabel("Header panel!!!");
 		constraints.gridy = 1;
-		add(label2, constraints);
+		add(questionsFileChooser, constraints);
 
-		JLabel label3 = new JLabel("Header panel!!!");
 		constraints.gridy = 2;
-		add(label3, constraints);
+		add(answersFileChooser, constraints);
 	}
 }

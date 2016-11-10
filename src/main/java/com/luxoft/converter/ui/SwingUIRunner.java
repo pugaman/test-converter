@@ -27,6 +27,12 @@ public class SwingUIRunner implements UIRunner {
 		JFrame mainFrame = new JFrame("Test converter");
 		mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+		Dimension dimension = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
+		mainFrame.setMinimumSize(dimension);
+		mainFrame.setPreferredSize(dimension);
+		mainFrame.setMaximumSize(dimension);
+		mainFrame.setResizable(false);
+
 		mainFrame.setJMenuBar(mainMenuBar);
 		mainFrame.getContentPane().add(mainPanel);
 

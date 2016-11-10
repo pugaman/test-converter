@@ -15,9 +15,6 @@ import static java.awt.BorderLayout.SOUTH;
  */
 public class MainPanel extends JPanel {
 
-	private static final int ROW_NUMBER = 3;
-	private static final int COL_NUMBER = 1;
-
 	@Autowired
 	private JPanel headerPanel;
 	@Autowired
@@ -32,11 +29,11 @@ public class MainPanel extends JPanel {
 	@PostConstruct
 	protected void init() {
 		//Set grid layout with suitable constraints
-		setLayout(new GridLayout(ROW_NUMBER, COL_NUMBER));
+		setLayout(new BorderLayout());
 
 		//Add panes
-		add(headerPanel);
-		add(centralPanel);
-		add(footerPanel);
+		add(headerPanel, BorderLayout.PAGE_START);
+		add(centralPanel, BorderLayout.LINE_START);
+		add(footerPanel, BorderLayout.PAGE_END);
 	}
 }

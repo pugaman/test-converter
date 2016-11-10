@@ -12,10 +12,10 @@ import javax.swing.*;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.luxoft.converter.configuration"})
-public class SimpleApplication {
+public class TestConverterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication application = new SpringApplication(SimpleApplication.class);
+		SpringApplication application = new SpringApplication(TestConverterApplication.class);
 		application.setHeadless(false);
 
 		//Create and show GUI

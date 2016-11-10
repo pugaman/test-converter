@@ -1,5 +1,7 @@
 package com.luxoft.converter.ui.component.panel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 
@@ -8,13 +10,17 @@ import javax.swing.*;
  */
 public class FooterPanel extends JPanel {
 
+	@Autowired
+	Action startConvertingAction;
+
 	public FooterPanel() {
 		super();
 	}
 
 	@PostConstruct
 	protected void init(){
-		JLabel label = new JLabel("Start");
-		add(label);
+		JButton startButton = new JButton(startConvertingAction);
+		startButton.setText("Start converting");
+		add(startButton);
 	}
 }

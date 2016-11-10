@@ -10,4 +10,7 @@ import javax.swing.*;
  */
 public interface UIRunner extends Runnable{
 
+    int WINDOW_WIDTH = 500;
+    int WINDOW_HEIGHT = 300;
+
 }
