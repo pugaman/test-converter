@@ -9,30 +9,31 @@ import java.util.Random;
  */
 public class Question {
 
-	private static final Random RANDOM = new Random();
-	private static final Long LOWER_BOUND = 200000L;
-
-	private final String text;
+	private String text;
 	private ResponseType responseType;
-	private final Long referenceNumber;
+	private final Integer referenceNumber;
 
 	private final List<Answer> answers;
 
-	public Question(String text, ResponseType responseType) {
+	public Question(String text, Integer number, ResponseType responseType) {
 		this.text = text;
 		this.responseType = responseType;
 
-		this.referenceNumber = RANDOM.nextLong() + LOWER_BOUND;
+		this.referenceNumber = number;
 
 		this.answers = new ArrayList<>();
 	}
 
-	public Question(String text){
-		this(text, ResponseType.SINGLE);
+	public Question(String text, Integer number){
+		this(text, number, ResponseType.SINGLE);
 	}
 
 	public String getText() {
 		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public ResponseType getResponseType() {
@@ -43,7 +44,7 @@ public class Question {
 		this.responseType = responseType;
 	}
 
-	public Long getReferenceNumber() {
+	public Integer getReferenceNumber() {
 		return referenceNumber;
 	}
 
@@ -51,9 +52,10 @@ public class Question {
 		return answers;
 	}
 
-	public boolean addAnswer(String text, boolean isCorrect){
-		Integer nextOrder = this.answers.size() + 1;
-		Answer answer = new Answer(nextOrder, text, isCorrect);
-		return this.answers.add(answer);
+	public Answer addAnswer(String text, boolean isCorrect){
+		final Integer nextOrder = answers.size() + 1;
+		final Answer answer = new Answer(nextOrder, text, isCorrect);
+		answers.add(answer);
+		return answer;
 	}
 }

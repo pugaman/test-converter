@@ -16,13 +16,15 @@ public interface VirtualFileStorage {
 
     //File kind extensions
     String TEST_FILE_EXTENSION = "docx";
-    String QUESTIONS_FILE_EXTENSION = "xlsx";
-    String ANSWERS_FILE_EXTENSION = "xlsx";
+    String QUESTIONS_FILE_EXTENSION = "xls";
+    String ANSWERS_FILE_EXTENSION = "xls";
 
     void storeFile(String fileKind, File file);
 
     File getFile(String fileKind);
 
     String getFileKindExtension(String fileKind);
+
+    boolean isValid();
 
 }

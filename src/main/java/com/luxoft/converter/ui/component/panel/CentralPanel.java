@@ -1,6 +1,7 @@
 package com.luxoft.converter.ui.component.panel;
 
 import com.luxoft.converter.ui.component.custom.CustomFileChooser;
+import com.luxoft.converter.ui.component.custom.CustomFormatChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +12,9 @@ import java.awt.*;
  * Created by pgolovenkov on 09.11.2016.
  */
 public class CentralPanel extends JPanel {
+
+	@Autowired
+	CustomFormatChooser testFormatChooser;
 
 	@Autowired
 	CustomFileChooser testFileChooser;
@@ -34,12 +38,15 @@ public class CentralPanel extends JPanel {
 		constraints.gridx = 0;
 
 		constraints.gridy = 0;
-		add(testFileChooser, constraints);
+		add(testFormatChooser, constraints);
 
 		constraints.gridy = 1;
-		add(questionsFileChooser, constraints);
+		add(testFileChooser, constraints);
 
 		constraints.gridy = 2;
+		add(questionsFileChooser, constraints);
+
+		constraints.gridy = 3;
 		add(answersFileChooser, constraints);
 	}
 }

@@ -3,6 +3,7 @@ package com.luxoft.converter.configuration;
 import com.luxoft.converter.service.ApplicationContextProvider;
 import com.luxoft.converter.service.file.ConcurrentMapVirtualFileStorage;
 import com.luxoft.converter.service.file.VirtualFileStorage;
+import com.luxoft.converter.service.format.TestParsingFormatHolder;
 import com.luxoft.converter.service.test.constructing.DocumentConstructorFactory;
 import com.luxoft.converter.service.test.constructing.ms.excel.XlsXExcelConstructorFactory;
 import com.luxoft.converter.service.test.parsing.DocumentParserFactory;
@@ -17,22 +18,27 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfiguration {
 
 	@Bean
-	public ApplicationContextProvider getApplicationContextProvider(){
+	public ApplicationContextProvider applicationContextProvider(){
 		return new ApplicationContextProvider();
 	}
 
 	@Bean
-	public VirtualFileStorage getVirtualFileStorage(){
+	public VirtualFileStorage virtualFileStorage(){
 		return new ConcurrentMapVirtualFileStorage();
 	}
 
 	@Bean
-	public DocumentParserFactory getDocumentParserFactory(){
+	public DocumentParserFactory documentParserFactory(){
 		return new DocXWordParserFactory();
 	}
 
 	@Bean
-	public DocumentConstructorFactory getDocumentConstructorFactory(){
+	public DocumentConstructorFactory documentConstructorFactory(){
 		return new XlsXExcelConstructorFactory();
+	}
+
+	@Bean
+	public TestParsingFormatHolder testParsingFormatHolder(){
+		return new TestParsingFormatHolder();
 	}
 }

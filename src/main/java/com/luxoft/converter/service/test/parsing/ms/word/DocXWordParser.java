@@ -4,7 +4,7 @@ import com.luxoft.converter.model.domain.Answer;
 import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
 import com.luxoft.converter.service.test.parsing.DocumentParser;
-import com.luxoft.converter.service.test.parsing.ParsingFormat;
+import com.luxoft.converter.service.test.parsing.TestParsingFormat;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -15,68 +15,90 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by pgolovenkov on 09.11.2016.
  */
-public class DocXWordParser implements DocumentParser{
+public class DocXWordParser implements DocumentParser {
 
-	private final ParsingFormat format;
+    private static final Random RANDOM = new Random();
+    private static final Integer LOWER_BOUND = 200000;
+    private static final String NEW_LINE_SIGN = "\n";
 
-	public DocXWordParser(ParsingFormat format) {
-		this.format = format;
-	}
+    private final TestParsingFormat format;
 
-	public List<Question> parse(File file) {
+    DocXWordParser(TestParsingFormat format) {
+        this.format = format;
+    }
 
-		final List<Question> questions = new ArrayList<>();
+    public List<Question> parse(File file) {
 
-		try (FileInputStream inputStream = new FileInputStream(file);
-			 XWPFDocument document = new XWPFDocument(inputStream)) {
+        final List<Question> questions = new ArrayList<>();
+        int questionReferenceNumber = LOWER_BOUND;
 
-			Question lastQuestion = null;
-			int correctAnswersCount = 0;
+        try (FileInputStream inputStream = new FileInputStream(file);
+             XWPFDocument document = new XWPFDocument(inputStream)) {
 
-			final List<IBodyElement> elements = document.getBodyElements();
-			for (final IBodyElement element : elements) {
-				//We are not interesting in Tables and Contents
-				if(!(element instanceof XWPFParagraph)) {
-					continue;
-				}
+            Question lastQuestion = null;
+            int correctAnswersCount = 0;
 
-				final XWPFParagraph paragraph = (XWPFParagraph)element;
-				final List<XWPFRun> runs = paragraph.getRuns();
-				//We are not interesting in space lines
-				if(runs.size() == 0){
-					continue;
-				}
+            Answer lastAnswer = null;
 
-				String text = "";
-				runs.forEach(r -> text.concat(r.getText(0)));
+            final List<IBodyElement> elements = document.getBodyElements();
+            for (final IBodyElement element : elements) {
+                //We are not interesting in Tables and Contents
+                if (!(element instanceof XWPFParagraph)) {
+                    continue;
+                }
 
-				if(format.isQuestion(text)){
-					lastQuestion = new Question(text);
-					correctAnswersCount = 0;
-					questions.add(lastQuestion);
-				} else if(format.isAnswer(text)){
-					final boolean isCorrect = format.isCorrectAnswer(text);
-					if(lastQuestion != null) {
-						lastQuestion.addAnswer(text, isCorrect);
-						if (isCorrect) {
-							correctAnswersCount++;
-						}
-						if (correctAnswersCount > 1) {
-							lastQuestion.setResponseType(ResponseType.MULTIPLE);
-						}
-					}
-				}
-			}
-		} catch (IOException e){
-			e.printStackTrace();
-		}
+                final XWPFParagraph paragraph = (XWPFParagraph) element;
+                final List<XWPFRun> runs = paragraph.getRuns();
+                //We are not interesting in space lines
+                if (runs.size() == 0) {
+                    continue;
+                }
 
-		return questions;
-	}
+                StringBuilder textBuilder = new StringBuilder();
+
+                for (XWPFRun run : runs) {
+                    final String runText = run.getText(0);
+
+                    if (format.isQuestion(runText)) {
+                        textBuilder = new StringBuilder(runText);
+                        lastAnswer = null;
+                        lastQuestion = new Question(format.getQuestionText(textBuilder.toString()), questionReferenceNumber++);
+                        correctAnswersCount = 0;
+                        questions.add(lastQuestion);
+                    } else if (format.isAnswer(runText)) {
+                        textBuilder = new StringBuilder(runText);
+                        final boolean isCorrect = format.isCorrectAnswer(runText);
+                        if (lastQuestion != null) {
+                            lastAnswer = lastQuestion.addAnswer(format.getAnswerText(textBuilder.toString()), isCorrect);
+                            if (isCorrect) {
+                                correctAnswersCount++;
+                            }
+                            if (correctAnswersCount > 1) {
+                                lastQuestion.setResponseType(ResponseType.MULTIPLE);
+                            }
+                        }
+                    } else if(lastAnswer != null){
+                        textBuilder.append(runText);
+                        lastAnswer.setText(format.getAnswerText(textBuilder.toString()));
+                    } else if(lastQuestion != null){
+                        textBuilder.append(runText);
+                        lastQuestion.setText(format.getQuestionText(textBuilder.toString()));
+                    }
+                }
+                lastQuestion = null;
+                lastAnswer = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return questions;
+    }
 
 
 }

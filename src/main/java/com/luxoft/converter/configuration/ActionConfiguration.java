@@ -13,7 +13,7 @@ import javax.swing.*;
 public class ActionConfiguration {
 
     @Bean(name = "startConvertingAction")
-    public Action getStartConvertingAction(){
+    public Action startConvertingAction(){
         return new StartConvertingAction();
     }
 }

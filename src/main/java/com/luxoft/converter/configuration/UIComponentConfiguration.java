@@ -3,6 +3,7 @@ package com.luxoft.converter.configuration;
 import com.luxoft.converter.service.file.VirtualFileStorage;
 import com.luxoft.converter.ui.component.bar.menu.MainMenuBar;
 import com.luxoft.converter.ui.component.custom.CustomFileChooser;
+import com.luxoft.converter.ui.component.custom.CustomFormatChooser;
 import com.luxoft.converter.ui.component.panel.CentralPanel;
 import com.luxoft.converter.ui.component.panel.FooterPanel;
 import com.luxoft.converter.ui.component.panel.HeaderPanel;
@@ -19,43 +20,48 @@ import javax.swing.*;
 public class UIComponentConfiguration {
 
 	@Bean(name = "mainMenuBar")
-	public JMenuBar getMainMenuBar(){
+	public JMenuBar mainMenuBar(){
 		return new MainMenuBar();
 	}
 
 	@Bean(name = "mainPanel")
-	public JPanel getMainPanel(){
+	public JPanel mainPanel(){
 		return new MainPanel();
 	}
 
 	@Bean(name = "headerPanel")
-	public JPanel getHeaderPanel(){
+	public JPanel headerPanel(){
 		return new HeaderPanel();
 	}
 
 	@Bean(name = "centralPanel")
-	public JPanel getCentralPanel(){
+	public JPanel centralPanel(){
 		return new CentralPanel();
 	}
 
 	@Bean(name = "footerPanel")
-	public JPanel getFooterPanel(){
+	public JPanel footerPanel(){
 		return new FooterPanel();
 	}
 
 	@Bean(name = "testFileChooser")
-	public CustomFileChooser getTestFileChooser(){
+	public CustomFileChooser testFileChooser(){
 		return new CustomFileChooser("Choose test file", VirtualFileStorage.TEST_FILE);
 	}
 
 	@Bean(name = "questionsFileChooser")
-	public CustomFileChooser getQuestionsFileChooser(){
+	public CustomFileChooser questionsFileChooser(){
 		return new CustomFileChooser("Choose target file for questions", VirtualFileStorage.QUESTIONS_FILE);
 	}
 
 	@Bean(name = "answersFileChooser")
-	public CustomFileChooser getAnswersFileChooser(){
+	public CustomFileChooser answersFileChooser(){
 		return new CustomFileChooser("Choose target file for answers", VirtualFileStorage.ANSWERS_FILE);
+	}
+
+	@Bean(name = "testFormatChooser")
+	public CustomFormatChooser testFormatChooser(){
+		return new CustomFormatChooser();
 	}
 
 

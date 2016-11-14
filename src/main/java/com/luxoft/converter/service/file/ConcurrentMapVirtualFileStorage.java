@@ -57,5 +57,15 @@ public class ConcurrentMapVirtualFileStorage implements VirtualFileStorage {
         }
         return result;
     }
+
+    @Override
+    public boolean isValid() {
+        for (String allowedFileKind : ALLOWED_FILE_KINDS) {
+            if(fileKindToFile.get(allowedFileKind) == null){
+                return false;
+            }
+        }
+        return true;
+    }
 }
 

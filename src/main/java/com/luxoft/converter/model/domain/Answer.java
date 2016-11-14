@@ -6,7 +6,7 @@ package com.luxoft.converter.model.domain;
 public class Answer {
 
 	private final Integer order;
-	private final String text;
+	private String text;
 	private final boolean isCorrect;
 
 	public Answer(Integer order, String text, boolean isCorrect) {
@@ -21,6 +21,10 @@ public class Answer {
 
 	public String getText() {
 		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public boolean isCorrect() {

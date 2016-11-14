@@ -5,6 +5,8 @@ package com.luxoft.converter.service.test.parsing;
  */
 public interface DocumentParserFactory {
 
-	DocumentParser createParser(ParsingFormat format);
+	DocumentParser createParser(TestParsingFormat format);
+
+	boolean isSupport(TestParsingFormat format);
 
 }
