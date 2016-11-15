@@ -5,6 +5,7 @@ import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
 import com.luxoft.converter.service.test.parsing.DocumentParser;
 import com.luxoft.converter.service.test.parsing.TestParsingFormat;
+import com.luxoft.converter.service.test.parsing.ms.word.format.DocXTestParsingFormat;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -26,9 +27,9 @@ public class DocXWordParser implements DocumentParser {
     private static final Integer LOWER_BOUND = 200000;
     private static final String NEW_LINE_SIGN = "\n";
 
-    private final TestParsingFormat format;
+    private final DocXTestParsingFormat format;
 
-    DocXWordParser(TestParsingFormat format) {
+    DocXWordParser(DocXTestParsingFormat format) {
         this.format = format;
     }
 
@@ -40,10 +41,8 @@ public class DocXWordParser implements DocumentParser {
         try (FileInputStream inputStream = new FileInputStream(file);
              XWPFDocument document = new XWPFDocument(inputStream)) {
 
-            Question lastQuestion = null;
-            int correctAnswersCount = 0;
-
-            Answer lastAnswer = null;
+            //Mock question for start counting reference number
+            Question lastQuestion = new Question("", LOWER_BOUND - 1);
 
             final List<IBodyElement> elements = document.getBodyElements();
             for (final IBodyElement element : elements) {
@@ -53,45 +52,11 @@ public class DocXWordParser implements DocumentParser {
                 }
 
                 final XWPFParagraph paragraph = (XWPFParagraph) element;
-                final List<XWPFRun> runs = paragraph.getRuns();
-                //We are not interesting in space lines
-                if (runs.size() == 0) {
-                    continue;
+                List<Question> questionsInner = format.analyzeParagraph(paragraph, lastQuestion);
+                if(questionsInner.size() > 0) {
+                    questions.addAll(questionsInner);
+                    lastQuestion = questionsInner.get(questionsInner.size() - 1);
                 }
-
-                StringBuilder textBuilder = new StringBuilder();
-
-                for (XWPFRun run : runs) {
-                    final String runText = run.getText(0);
-
-                    if (format.isQuestion(runText)) {
-                        textBuilder = new StringBuilder(runText);
-                        lastAnswer = null;
-                        lastQuestion = new Question(format.getQuestionText(textBuilder.toString()), questionReferenceNumber++);
-                        correctAnswersCount = 0;
-                        questions.add(lastQuestion);
-                    } else if (format.isAnswer(runText)) {
-                        textBuilder = new StringBuilder(runText);
-                        final boolean isCorrect = format.isCorrectAnswer(runText);
-                        if (lastQuestion != null) {
-                            lastAnswer = lastQuestion.addAnswer(format.getAnswerText(textBuilder.toString()), isCorrect);
-                            if (isCorrect) {
-                                correctAnswersCount++;
-                            }
-                            if (correctAnswersCount > 1) {
-                                lastQuestion.setResponseType(ResponseType.MULTIPLE);
-                            }
-                        }
-                    } else if(lastAnswer != null){
-                        textBuilder.append(runText);
-                        lastAnswer.setText(format.getAnswerText(textBuilder.toString()));
-                    } else if(lastQuestion != null){
-                        textBuilder.append(runText);
-                        lastQuestion.setText(format.getQuestionText(textBuilder.toString()));
-                    }
-                }
-                lastQuestion = null;
-                lastAnswer = null;
             }
         } catch (IOException e) {
             e.printStackTrace();

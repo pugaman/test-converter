@@ -7,7 +7,7 @@ public class Answer {
 
 	private final Integer order;
 	private String text;
-	private final boolean isCorrect;
+	private boolean isCorrect;
 
 	public Answer(Integer order, String text, boolean isCorrect) {
 		this.order = order;
@@ -29,5 +29,9 @@ public class Answer {
 
 	public boolean isCorrect() {
 		return isCorrect;
+	}
+
+	public void setIsCorrect(boolean isCorrect) {
+		this.isCorrect = isCorrect;
 	}
 }

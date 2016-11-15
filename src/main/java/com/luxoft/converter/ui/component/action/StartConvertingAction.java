@@ -8,8 +8,6 @@ import com.luxoft.converter.service.test.constructing.DocumentConstructor;
 import com.luxoft.converter.service.test.constructing.DocumentConstructorFactory;
 import com.luxoft.converter.service.test.parsing.DocumentParser;
 import com.luxoft.converter.service.test.parsing.DocumentParserFactory;
-import com.luxoft.converter.service.test.parsing.TestParsingFormat;
-import com.luxoft.converter.service.test.parsing.ms.word.format.SimpleTestFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -42,7 +40,6 @@ public class StartConvertingAction extends AbstractAction implements PropertyCha
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         Component parent = SwingUtilities.getWindowAncestor((Component)e.getSource());
 
         //Check format
@@ -74,6 +71,7 @@ public class StartConvertingAction extends AbstractAction implements PropertyCha
 
         @Override
         protected Void doInBackground() throws Exception {
+            setEnabled(false);
             //Start processing
             final DocumentParser parser = documentParserFactory.createParser(testParsingFormatHolder.getTestParsingFormat());
             final File testSourceFile = virtualFileStorage.getFile(VirtualFileStorage.TEST_FILE);
@@ -103,6 +101,7 @@ public class StartConvertingAction extends AbstractAction implements PropertyCha
 
         @Override
         protected void done() {
+            setEnabled(true);
             JOptionPane.showMessageDialog(null, "Converting is completed.", "Complete", JOptionPane.INFORMATION_MESSAGE);
         }
     }

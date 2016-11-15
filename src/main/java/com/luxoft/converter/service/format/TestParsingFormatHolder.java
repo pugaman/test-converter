@@ -1,9 +1,9 @@
 package com.luxoft.converter.service.format;
 
 import com.luxoft.converter.service.test.parsing.TestParsingFormat;
-import com.luxoft.converter.service.test.parsing.ms.word.format.BABOKTestFormat;
-import com.luxoft.converter.service.test.parsing.ms.word.format.SectionTestFormat;
-import com.luxoft.converter.service.test.parsing.ms.word.format.SimpleTestFormat;
+import com.luxoft.converter.service.test.parsing.ms.word.format.impl.BABOKTestFormat;
+import com.luxoft.converter.service.test.parsing.ms.word.format.impl.SectionTestFormat;
+import com.luxoft.converter.service.test.parsing.ms.word.format.impl.SimpleTestFormat;
 
 import java.util.*;
 
