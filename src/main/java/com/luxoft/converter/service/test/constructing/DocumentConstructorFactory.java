@@ -7,5 +7,5 @@ import java.io.File;
  */
 public interface DocumentConstructorFactory {
 
-	DocumentConstructor createConstructor(File file);
+	DocumentConstructor createConstructor(File template, File resultsDirectory, String resultsFileName);
 }

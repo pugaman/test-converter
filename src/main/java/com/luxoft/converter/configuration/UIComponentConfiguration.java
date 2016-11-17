@@ -51,12 +51,17 @@ public class UIComponentConfiguration {
 
 	@Bean(name = "questionsFileChooser")
 	public CustomFileChooser questionsFileChooser(){
-		return new CustomFileChooser("Choose target file for questions", VirtualFileStorage.QUESTIONS_FILE);
+		return new CustomFileChooser("Choose questions template file", VirtualFileStorage.QUESTIONS_FILE);
 	}
 
 	@Bean(name = "answersFileChooser")
 	public CustomFileChooser answersFileChooser(){
-		return new CustomFileChooser("Choose target file for answers", VirtualFileStorage.ANSWERS_FILE);
+		return new CustomFileChooser("Choose answers template file", VirtualFileStorage.ANSWERS_FILE);
+	}
+
+	@Bean(name = "resultsFileChooser")
+	public CustomFileChooser resultsFileChooser(){
+		return new CustomFileChooser("Choose target folder for results", VirtualFileStorage.RESULTS_FILE);
 	}
 
 	@Bean(name = "testFormatChooser")

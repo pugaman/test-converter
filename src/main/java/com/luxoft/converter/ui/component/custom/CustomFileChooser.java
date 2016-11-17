@@ -10,102 +10,108 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
+import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
+
 /**
  * Created by Pavel on 10.11.2016.
  */
 public class CustomFileChooser extends JPanel {
 
-    @Autowired
-    private VirtualFileStorage virtualFileStorage;
+	@Autowired
+	private VirtualFileStorage virtualFileStorage;
 
-    private static final String FILE_NAME_FIELD_EMPTY_TEXT = "No file is chosen";
-    private static final int FILE_NAME_FIELD_COLUMNS = 30;
+	private static final String FILE_NAME_FIELD_EMPTY_TEXT = "No file is chosen";
+	private static final int FILE_NAME_FIELD_COLUMNS = 30;
 
-    private static final String FILE_CHOOSER_OPEN_BUTTON_TEXT = "Choose file";
-    private static final String FILE_CHOOSER_APPROVE_BUTTON_TEXT = "Choose";
+	private static final String FILE_CHOOSER_OPEN_BUTTON_TEXT = "Choose file";
+	private static final String FILE_CHOOSER_APPROVE_BUTTON_TEXT = "Choose";
 
-    private final JLabel title;
+	private final JLabel title;
 
-    private final JButton openFileChooserButton;
-    private final JTextField chosenFileName;
+	private final JButton openFileChooserButton;
+	private final JTextField chosenFileName;
 
-    public CustomFileChooser(String titleText, String fileKind) {
-        super(new BorderLayout());
+	public CustomFileChooser(String titleText, String fileKind) {
+		super(new BorderLayout());
 
-        this.title = new JLabel(titleText);
-        this.openFileChooserButton = new JButton(new ChooseFileAction(fileKind));
-        installFileChooserButton();
-        
-        this.chosenFileName = new JTextField(FILE_NAME_FIELD_EMPTY_TEXT, FILE_NAME_FIELD_COLUMNS);
-        installFileNameField();
+		this.title = new JLabel(titleText);
+		this.openFileChooserButton = new JButton(new ChooseFileAction(fileKind));
+		installFileChooserButton();
 
-        buildComponent();
-    }
-    
-    private void installFileNameField(){
-        this.chosenFileName.setEditable(false);
-        this.chosenFileName.setBackground(Color.white);
-    }
-    
-    private void installFileChooserButton(){
-        this.openFileChooserButton.setText(FILE_CHOOSER_OPEN_BUTTON_TEXT);
-    }
+		this.chosenFileName = new JTextField(FILE_NAME_FIELD_EMPTY_TEXT, FILE_NAME_FIELD_COLUMNS);
+		installFileNameField();
 
-    private void buildComponent() {
-        add(title, BorderLayout.PAGE_START);
+		buildComponent();
+	}
 
-        JPanel fieldPanel = new JPanel();
-        fieldPanel.add(openFileChooserButton);
-        fieldPanel.add(chosenFileName);
-        add(fieldPanel, BorderLayout.LINE_START);
-    }
+	private void installFileNameField() {
+		this.chosenFileName.setEditable(false);
+		this.chosenFileName.setBackground(Color.white);
+	}
 
-    @PostConstruct
-    protected void init(){
-        ((ChooseFileAction)this.openFileChooserButton.getAction()).installFileChooser();
-    }
+	private void installFileChooserButton() {
+		this.openFileChooserButton.setText(FILE_CHOOSER_OPEN_BUTTON_TEXT);
+	}
 
-    private class ChooseFileAction extends AbstractAction {
+	private void buildComponent() {
+		add(title, BorderLayout.PAGE_START);
 
-        private static final String FILE_FILTER_NAME = "Suitable files";
-        private final String fileKind;
-        private final JFileChooser fileChooser;
+		JPanel fieldPanel = new JPanel();
+		fieldPanel.add(openFileChooserButton);
+		fieldPanel.add(chosenFileName);
+		add(fieldPanel, BorderLayout.LINE_START);
+	}
 
-        ChooseFileAction(String fileKind) {
-            this.fileKind = fileKind;
-            this.fileChooser = new JFileChooser();
-        }
+	@PostConstruct
+	protected void init() {
+		((ChooseFileAction) this.openFileChooserButton.getAction()).installFileChooser();
+	}
 
-        void installFileChooser(){
-            String rightFileExtension = virtualFileStorage.getFileKindExtension(this.fileKind);
-            this.fileChooser.setFileFilter(new FileFilter() {
+	private class ChooseFileAction extends AbstractAction {
 
-                @Override
-                public boolean accept(File f) {
-                    if (f.isDirectory()) {
-                        return true;
-                    }
+		private static final String FILE_FILTER_NAME = "Suitable files";
+		private final String fileKind;
+		private final JFileChooser fileChooser;
 
-                    return f.getName().endsWith(rightFileExtension);
-                }
+		ChooseFileAction(String fileKind) {
+			this.fileKind = fileKind;
+			this.fileChooser = new JFileChooser();
+		}
 
-                @Override
-                public String getDescription() {
-                    return FILE_FILTER_NAME;
-                }
-            });
-        }
+		void installFileChooser() {
+			String rightFileExtension = virtualFileStorage.getFileKindExtension(this.fileKind);
+			if (rightFileExtension != null) {
+				this.fileChooser.setFileFilter(new FileFilter() {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int result = fileChooser.showDialog(null, FILE_CHOOSER_APPROVE_BUTTON_TEXT);
-            if(JFileChooser.APPROVE_OPTION == result){
-                File chosenFile = fileChooser.getSelectedFile();
-                virtualFileStorage.storeFile(fileKind, chosenFile);
-                chosenFileName.setText(chosenFile.getName());
-            }
-        }
-    }
+					@Override
+					public boolean accept(File f) {
+						if (f.isDirectory()) {
+							return true;
+						}
+
+						return f.getName().endsWith(rightFileExtension);
+					}
+
+					@Override
+					public String getDescription() {
+						return FILE_FILTER_NAME;
+					}
+				});
+			} else {
+				this.fileChooser.setFileSelectionMode(DIRECTORIES_ONLY);
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int result = fileChooser.showDialog(null, FILE_CHOOSER_APPROVE_BUTTON_TEXT);
+			if (JFileChooser.APPROVE_OPTION == result) {
+				File chosenFile = fileChooser.getSelectedFile();
+				virtualFileStorage.storeFile(fileKind, chosenFile);
+				chosenFileName.setText(chosenFile.getName());
+			}
+		}
+	}
 
 
 }

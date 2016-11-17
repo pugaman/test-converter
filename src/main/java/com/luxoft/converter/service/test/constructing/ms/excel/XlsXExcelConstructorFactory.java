@@ -14,9 +14,9 @@ import java.io.IOException;
 public class XlsXExcelConstructorFactory implements DocumentConstructorFactory {
 
 	@Override
-	public DocumentConstructor createConstructor(File file) {
+	public DocumentConstructor createConstructor(File template, File targetDirectory, String resultsFileName) {
 		try {
-			return new XlsXExcelConstructor(file);
+			return new XlsXExcelConstructor(template, targetDirectory, resultsFileName);
 		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
 		}

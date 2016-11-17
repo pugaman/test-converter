@@ -13,6 +13,7 @@ public interface VirtualFileStorage {
     String TEST_FILE = "TEST_FILE";
     String QUESTIONS_FILE = "QUESTIONS_FILE";
     String ANSWERS_FILE = "ANSWERS_FILE";
+    String RESULTS_FILE = "RESULTS_FILE";
 
     //File kind extensions
     String TEST_FILE_EXTENSION = "docx";

@@ -18,6 +18,7 @@ public class ConcurrentMapVirtualFileStorage implements VirtualFileStorage {
         ALLOWED_FILE_KINDS.add(TEST_FILE);
         ALLOWED_FILE_KINDS.add(QUESTIONS_FILE);
         ALLOWED_FILE_KINDS.add(ANSWERS_FILE);
+        ALLOWED_FILE_KINDS.add(RESULTS_FILE);
     }
 
     private final ConcurrentMap<String, File> fileKindToFile = new ConcurrentHashMap<>();

@@ -13,6 +13,9 @@ import java.util.List;
  */
 public interface DocumentConstructor extends Closeable{
 
+	String QUESTIONS_FILE_NAME_SUFFIX = "_Questions";
+	String ANSWERS_FILE_NAME_SUFFIX = "_Answers";
+
 	void writeQuestion(Question question);
 
 	void writeAnswer(Answer answer, Question question);
