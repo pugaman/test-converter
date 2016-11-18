@@ -88,7 +88,6 @@ public class CustomFileChooser extends JPanel {
 						if (f.isDirectory()) {
 							return true;
 						}
-
 						return f.getName().endsWith(rightFileExtension);
 					}
 
@@ -104,7 +103,7 @@ public class CustomFileChooser extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			File previousChosenFile = virtualFileStorage.getFile(fileKind);
+			File previousChosenFile = virtualFileStorage.getLastChosenFile();
 			fileChooser.setCurrentDirectory(previousChosenFile != null ? previousChosenFile.getParentFile() : null);
 			int result = fileChooser.showDialog(null, FILE_CHOOSER_APPROVE_BUTTON_TEXT);
 			if (JFileChooser.APPROVE_OPTION == result) {

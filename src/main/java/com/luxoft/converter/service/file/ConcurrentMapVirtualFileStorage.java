@@ -1,10 +1,14 @@
 package com.luxoft.converter.service.file;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Pavel on 10.11.2016.
@@ -21,19 +25,43 @@ public class ConcurrentMapVirtualFileStorage implements VirtualFileStorage {
         ALLOWED_FILE_KINDS.add(RESULTS_FILE);
     }
 
-    private final ConcurrentMap<String, File> fileKindToFile = new ConcurrentHashMap<>();
+    private final Lock fileLock = new ReentrantLock();
+
+    private final Map<String, File> fileKindToFile = new HashMap<>();
+    private File lastChosenFile = null;
 
     public void storeFile(String fileKind, File file) {
         if (isKindAllowed(fileKind)) {
-            fileKindToFile.put(fileKind, file);
+            fileLock.lock();
+            try {
+                fileKindToFile.put(fileKind, file);
+                lastChosenFile = file;
+            } finally {
+                fileLock.unlock();
+            }
         }
     }
 
     public File getFile(String fileKind) {
         if (isKindAllowed(fileKind)) {
-            return fileKindToFile.get(fileKind);
+            fileLock.lock();
+            try {
+                return fileKindToFile.get(fileKind);
+            } finally {
+                fileLock.unlock();
+            }
         }
         return null;
+    }
+
+    @Override
+    public File getLastChosenFile() {
+        fileLock.lock();
+        try {
+            return lastChosenFile;
+        } finally {
+            fileLock.unlock();
+        }
     }
 
     private boolean isKindAllowed(String fileKind) {

@@ -26,6 +26,8 @@ public interface VirtualFileStorage {
 
     String getFileKindExtension(String fileKind);
 
+    File getLastChosenFile();
+
     boolean isValid();
 
 }
