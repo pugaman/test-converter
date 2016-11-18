@@ -58,6 +58,8 @@ public class XlsXExcelConstructor implements DocumentConstructor {
 		row.createCell(8).setCellValue(creationHelper.createRichTextString(CULTURE_ID));
 		row.createCell(9).setCellValue(creationHelper.createRichTextString(CULTURE_ID));
 		row.createCell(10).setCellValue(creationHelper.createRichTextString("Y"));
+		row.createCell(11)
+				.setCellValue(creationHelper.createRichTextString(String.valueOf(question.getAnswers().size())));
 		row.createCell(13).setCellValue("1");
 		currentRow++;
 	}

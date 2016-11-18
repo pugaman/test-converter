@@ -79,9 +79,9 @@ public class CustomFileChooser extends JPanel {
 		}
 
 		void installFileChooser() {
-			String rightFileExtension = virtualFileStorage.getFileKindExtension(this.fileKind);
+			String rightFileExtension = virtualFileStorage.getFileKindExtension(fileKind);
 			if (rightFileExtension != null) {
-				this.fileChooser.setFileFilter(new FileFilter() {
+				fileChooser.setFileFilter(new FileFilter() {
 
 					@Override
 					public boolean accept(File f) {
@@ -98,12 +98,14 @@ public class CustomFileChooser extends JPanel {
 					}
 				});
 			} else {
-				this.fileChooser.setFileSelectionMode(DIRECTORIES_ONLY);
+				fileChooser.setFileSelectionMode(DIRECTORIES_ONLY);
 			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			File previousChosenFile = virtualFileStorage.getFile(fileKind);
+			fileChooser.setCurrentDirectory(previousChosenFile != null ? previousChosenFile.getParentFile() : null);
 			int result = fileChooser.showDialog(null, FILE_CHOOSER_APPROVE_BUTTON_TEXT);
 			if (JFileChooser.APPROVE_OPTION == result) {
 				File chosenFile = fileChooser.getSelectedFile();
