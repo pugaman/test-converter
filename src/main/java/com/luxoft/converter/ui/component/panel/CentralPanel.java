@@ -20,15 +20,6 @@ public class CentralPanel extends JPanel {
 	@Autowired
 	List<CustomFileChooser> fileChooserList;
 
-//	@Autowired
-//	CustomFileChooser questionsFileChooser;
-//
-//	@Autowired
-//	CustomFileChooser answersFileChooser;
-//
-//	@Autowired
-//	CustomFileChooser resultsFileChooser;
-
 	public CentralPanel() {
 		super();
 	}
@@ -48,17 +39,5 @@ public class CentralPanel extends JPanel {
 			constraints.gridy = i;
 			add(fileChooserList.get(i-1), constraints);
 		}
-
-//			constraints.gridy = 1;
-//		add(testFileChooser, constraints);
-//
-//		constraints.gridy = 2;
-//		add(questionsFileChooser, constraints);
-//
-//		constraints.gridy = 3;
-//		add(answersFileChooser, constraints);
-//
-//		constraints.gridy = 4;
-//		add(resultsFileChooser, constraints);
 	}
 }
