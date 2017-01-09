@@ -1,5 +1,6 @@
 package com.luxoft.converter.ui.component.panel;
 
+import com.luxoft.converter.ui.component.custom.CustomCodeInput;
 import com.luxoft.converter.ui.component.custom.CustomFileChooser;
 import com.luxoft.converter.ui.component.custom.CustomFormatChooser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ public class CentralPanel extends JPanel {
 
 	@Autowired
 	CustomFormatChooser testFormatChooser;
-
+	@Autowired
+	CustomCodeInput customCodeInput;
 	@Autowired
 	List<CustomFileChooser> fileChooserList;
 
@@ -39,5 +41,8 @@ public class CentralPanel extends JPanel {
 			constraints.gridy = i;
 			add(fileChooserList.get(i-1), constraints);
 		}
+
+		constraints.gridy = fileChooserList.size() + 1;
+		add(customCodeInput, constraints);
 	}
 }

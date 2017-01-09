@@ -2,6 +2,7 @@ package com.luxoft.converter.ui.component.action;
 
 import com.luxoft.converter.model.domain.Answer;
 import com.luxoft.converter.model.domain.Question;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.file.VirtualFileStorage;
 import com.luxoft.converter.service.format.TestParsingFormatHolder;
 import com.luxoft.converter.service.test.constructing.DocumentConstructor;
@@ -42,6 +43,9 @@ public class StartConvertingAction extends AbstractAction implements PropertyCha
 	@Autowired
 	protected DocumentConstructorFactory documentConstructorFactory;
 
+	@Autowired
+	protected QuestionCodeProvider questionCodeProvider;
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Component parent = SwingUtilities.getWindowAncestor((Component) e.getSource());
@@ -49,6 +53,13 @@ public class StartConvertingAction extends AbstractAction implements PropertyCha
 		//Check format
 		if (!documentParserFactory.isSupport(testParsingFormatHolder.getTestParsingFormat())) {
 			JOptionPane.showMessageDialog(parent, "Chosen format is not supported.", "Format error",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		//Check code prefix
+		if(!questionCodeProvider.isConfigured()){
+			JOptionPane.showMessageDialog(parent, "Code prefix for question is not configured.", "Code error",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}

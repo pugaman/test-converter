@@ -2,6 +2,7 @@ package com.luxoft.converter.service.test.parsing.ms.word.format.impl;
 
 import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.test.parsing.ms.word.format.DocXTestParsingFormat;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -29,7 +30,7 @@ public class BABOKTestFormat implements DocXTestParsingFormat {
 	}
 
 	@Override
-	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion) {
+	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion, QuestionCodeProvider questionCodeProvider) {
 		final List<Question> questions = new ArrayList<>();
 		final List<XWPFRun> runs = paragraph.getRuns();
 		//We are not interesting in space lines
@@ -40,7 +41,7 @@ public class BABOKTestFormat implements DocXTestParsingFormat {
 		final String paragraphText = paragraph.getParagraphText();
 		final String paragraphNumerationFormat = paragraph.getNumFmt();
 		if (isQuestion(paragraphText)) {
-			lastQuestion = new Question(getQuestionText(paragraphText), lastQuestion.getReferenceNumber() + 1);
+			lastQuestion = new Question(getQuestionText(paragraphText), questionCodeProvider.getCode());
 			questions.add(lastQuestion);
 			processedAnswerNumber = -1;
 		} else if (isAnswer(paragraphNumerationFormat)) {

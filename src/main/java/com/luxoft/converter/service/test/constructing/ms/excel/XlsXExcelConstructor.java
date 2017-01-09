@@ -50,7 +50,7 @@ public class XlsXExcelConstructor implements DocumentConstructor {
 	public void writeQuestion(Question question) {
 		Sheet activeSheet = workbook.getSheetAt(workbook.getActiveSheetIndex());
 		Row row = activeSheet.createRow(currentRow);
-		row.createCell(0).setCellValue(question.getReferenceNumber().toString());
+		row.createCell(0).setCellValue(question.getReferenceCode());
 		row.createCell(1).setCellValue(creationHelper.createRichTextString(question.getText()));
 		row.createCell(2).setCellValue(MULTIPLE.equals(
 				question.getResponseType()) ? MULTIPLE_RESPONSE_TYPE_VALUE : SINGLE_RESPONSE_TYPE_VALUE);
@@ -68,7 +68,7 @@ public class XlsXExcelConstructor implements DocumentConstructor {
 	public void writeAnswer(Answer answer, Question question) {
 		Sheet activeSheet = workbook.getSheetAt(workbook.getActiveSheetIndex());
 		Row row = activeSheet.createRow(currentRow);
-		row.createCell(0).setCellValue(question.getReferenceNumber());
+		row.createCell(0).setCellValue(question.getReferenceCode());
 		row.createCell(1).setCellValue(answer.getOrder());
 		row.createCell(2).setCellValue(creationHelper.createRichTextString(answer.getText()));
 		row.createCell(3).setCellValue(answer.isCorrect() ? creationHelper.createRichTextString("Y") : creationHelper

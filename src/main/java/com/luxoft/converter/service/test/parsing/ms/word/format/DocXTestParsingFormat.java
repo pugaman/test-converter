@@ -1,6 +1,7 @@
 package com.luxoft.converter.service.test.parsing.ms.word.format;
 
 import com.luxoft.converter.model.domain.Question;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.test.parsing.TestParsingFormat;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
@@ -11,6 +12,6 @@ import java.util.List;
  */
 public interface DocXTestParsingFormat extends TestParsingFormat {
 
-	List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion);
+	List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion, QuestionCodeProvider questionCodeProvider);
 
 }

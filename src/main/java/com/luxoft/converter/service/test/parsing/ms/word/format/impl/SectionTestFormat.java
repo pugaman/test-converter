@@ -3,6 +3,7 @@ package com.luxoft.converter.service.test.parsing.ms.word.format.impl;
 import com.luxoft.converter.model.domain.Answer;
 import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.test.parsing.ms.word.format.DocXTestParsingFormat;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -23,14 +24,13 @@ public class SectionTestFormat implements DocXTestParsingFormat {
 	private static final String QUESTION_NUM_FORMAT = "decimal";
 	private static final String ANSWER_NUM_FORMAT = "bullet";
 
-
 	@Override
 	public String getFormatName() {
 		return "Section format";
 	}
 
 	@Override
-	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion) {
+	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion, QuestionCodeProvider questionCodeProvider) {
 		final List<Question> questions = new ArrayList<>();
 		final List<XWPFRun> runs = paragraph.getRuns();
 		//We are not interesting in space lines
@@ -47,7 +47,7 @@ public class SectionTestFormat implements DocXTestParsingFormat {
 		final String paragraphText = paragraph.getParagraphText();
 		final String paragraphNumerationFormat = paragraph.getNumFmt();
 		if (isQuestion(paragraphNumerationFormat)) {
-			lastQuestion = new Question(getQuestionText(paragraphText), lastQuestion.getReferenceNumber() + 1);
+			lastQuestion = new Question(getQuestionText(paragraphText), questionCodeProvider.getCode());
 			questions.add(lastQuestion);
 		} else if (isAnswer(paragraphNumerationFormat)) {
 			final boolean isCorrect = isCorrectAnswer(paragraphText);

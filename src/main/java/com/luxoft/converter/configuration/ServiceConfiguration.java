@@ -1,6 +1,7 @@
 package com.luxoft.converter.configuration;
 
 import com.luxoft.converter.service.ApplicationContextProvider;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.file.ConcurrentMapVirtualFileStorage;
 import com.luxoft.converter.service.file.VirtualFileStorage;
 import com.luxoft.converter.service.format.TestParsingFormatHolder;
@@ -40,5 +41,10 @@ public class ServiceConfiguration {
 	@Bean
 	public TestParsingFormatHolder testParsingFormatHolder(){
 		return new TestParsingFormatHolder();
+	}
+
+	@Bean
+	public QuestionCodeProvider questionCodeProvider() {
+		return new QuestionCodeProvider();
 	}
 }

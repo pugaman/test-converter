@@ -3,6 +3,7 @@ package com.luxoft.converter.service.test.parsing.ms.word;
 import com.luxoft.converter.model.domain.Answer;
 import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.test.parsing.DocumentParser;
 import com.luxoft.converter.service.test.parsing.TestParsingFormat;
 import com.luxoft.converter.service.test.parsing.ms.word.format.DocXTestParsingFormat;
@@ -23,26 +24,23 @@ import java.util.Random;
  */
 public class DocXWordParser implements DocumentParser {
 
-    private static final Random RANDOM = new Random();
-    private static final Integer LOWER_BOUND = 200000;
-    private static final String NEW_LINE_SIGN = "\n";
-
     private final DocXTestParsingFormat format;
+    private final QuestionCodeProvider codeProvider;
 
-    DocXWordParser(DocXTestParsingFormat format) {
+    DocXWordParser(DocXTestParsingFormat format, QuestionCodeProvider codeProvider) {
         this.format = format;
+        this.codeProvider = codeProvider;
     }
 
     public List<Question> parse(File file) {
 
         final List<Question> questions = new ArrayList<>();
-        int questionReferenceNumber = LOWER_BOUND;
 
         try (FileInputStream inputStream = new FileInputStream(file);
              XWPFDocument document = new XWPFDocument(inputStream)) {
 
             //Mock question for start counting reference number
-            Question lastQuestion = new Question("", LOWER_BOUND - 1);
+            Question lastQuestion = new Question("", "");
 
             final List<IBodyElement> elements = document.getBodyElements();
             for (final IBodyElement element : elements) {
@@ -52,7 +50,7 @@ public class DocXWordParser implements DocumentParser {
                 }
 
                 final XWPFParagraph paragraph = (XWPFParagraph) element;
-                List<Question> questionsInner = format.analyzeParagraph(paragraph, lastQuestion);
+                List<Question> questionsInner = format.analyzeParagraph(paragraph, lastQuestion, codeProvider);
                 if(questionsInner.size() > 0) {
                     questions.addAll(questionsInner);
                     lastQuestion = questionsInner.get(questionsInner.size() - 1);

@@ -11,22 +11,22 @@ public class Question {
 	private String text;
 	private ResponseType responseType;
 	private Integer correctAnswersCount;
-	private final Integer referenceNumber;
+	private final String referenceCode;
 
 	private final List<Answer> answers;
 
-	private Question(String text, Integer number, ResponseType responseType) {
+	private Question(String text, String referenceCode, ResponseType responseType) {
 		this.text = text;
 		this.responseType = responseType;
 		this.correctAnswersCount = 0;
 
-		this.referenceNumber = number;
+		this.referenceCode = referenceCode;
 
 		this.answers = new ArrayList<>();
 	}
 
-	public Question(String text, Integer number) {
-		this(text, number, ResponseType.SINGLE);
+	public Question(String text, String referenceCode) {
+		this(text, referenceCode, ResponseType.SINGLE);
 	}
 
 	public String getText() {
@@ -49,8 +49,8 @@ public class Question {
 		return correctAnswersCount;
 	}
 
-	public Integer getReferenceNumber() {
-		return referenceNumber;
+	public String getReferenceCode() {
+		return referenceCode;
 	}
 
 	public List<Answer> getAnswers() {

@@ -1,7 +1,9 @@
 package com.luxoft.converter.configuration;
 
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.file.VirtualFileStorage;
 import com.luxoft.converter.ui.component.bar.menu.MainMenuBar;
+import com.luxoft.converter.ui.component.custom.CustomCodeInput;
 import com.luxoft.converter.ui.component.custom.CustomFileChooser;
 import com.luxoft.converter.ui.component.custom.CustomFormatChooser;
 import com.luxoft.converter.ui.component.panel.CentralPanel;
@@ -69,5 +71,8 @@ public class UIComponentConfiguration {
 		return new CustomFormatChooser();
 	}
 
-
+	@Bean(name = "questionCodeInput")
+	public CustomCodeInput questionCodeInput(){
+		return new CustomCodeInput("Enter a prefix for the course questions");
+	}
 }

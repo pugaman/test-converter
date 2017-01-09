@@ -3,6 +3,7 @@ package com.luxoft.converter.service.test.parsing.ms.word.format.impl;
 import com.luxoft.converter.model.domain.Answer;
 import com.luxoft.converter.model.domain.Question;
 import com.luxoft.converter.model.domain.ResponseType;
+import com.luxoft.converter.service.code.QuestionCodeProvider;
 import com.luxoft.converter.service.test.parsing.ms.word.format.DocXTestParsingFormat;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -27,7 +28,7 @@ public class SimpleTestFormat implements DocXTestParsingFormat {
 	}
 
 	@Override
-	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion) {
+	public List<Question> analyzeParagraph(XWPFParagraph paragraph, Question lastQuestion, QuestionCodeProvider questionCodeProvider) {
 		final List<Question> questions = new ArrayList<>();
 		final List<XWPFRun> runs = paragraph.getRuns();
 		//We are not interesting in space lines
@@ -36,7 +37,6 @@ public class SimpleTestFormat implements DocXTestParsingFormat {
 		}
 
 		StringBuilder textBuilder = new StringBuilder();
-		Question lastQuestionInner = lastQuestion;
 		Answer lastAnswer = null;
 
 		//text parts analyzing
@@ -46,22 +46,21 @@ public class SimpleTestFormat implements DocXTestParsingFormat {
 			if (isQuestion(runText)) {
 				textBuilder = new StringBuilder(runText);
 				lastAnswer = null;
-				lastQuestionInner = new Question(getQuestionText(textBuilder.toString()),
-						lastQuestionInner.getReferenceNumber() + 1);
-				questions.add(lastQuestionInner);
+				lastQuestion = new Question(getQuestionText(textBuilder.toString()), questionCodeProvider.getCode());
+				questions.add(lastQuestion);
 			} else if (isAnswer(runText)) {
 				textBuilder = new StringBuilder(runText);
 				final boolean isCorrect = isCorrectAnswer(runText);
-				lastAnswer = lastQuestionInner.addAnswer(getAnswerText(textBuilder.toString()), isCorrect);
-				if (lastQuestionInner.getCorrectAnswersCount() > 1) {
-					lastQuestionInner.setResponseType(ResponseType.MULTIPLE);
+				lastAnswer = lastQuestion.addAnswer(getAnswerText(textBuilder.toString()), isCorrect);
+				if (lastQuestion.getCorrectAnswersCount() > 1) {
+					lastQuestion.setResponseType(ResponseType.MULTIPLE);
 				}
 			} else if (lastAnswer != null) {
 				textBuilder.append(runText);
 				lastAnswer.setText(getAnswerText(textBuilder.toString()));
 			} else {
 				textBuilder.append(runText);
-				lastQuestionInner.setText(getQuestionText(textBuilder.toString()));
+				lastQuestion.setText(getQuestionText(textBuilder.toString()));
 			}
 		}
 		return questions;
